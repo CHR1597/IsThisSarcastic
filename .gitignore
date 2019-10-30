@@ -1,0 +1,6 @@
+SARC/*
+Papers/*
+*.tex
+*.aux
+*.log
+*.gz
