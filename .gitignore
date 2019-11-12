@@ -4,3 +4,4 @@ Papers/*
 *.aux
 *.log
 *.gz
+*.json

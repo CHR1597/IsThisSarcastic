@@ -1,0 +1,132 @@
+text: Wow I wonder who could be behind this?
+subreddit: worldnews
+score: 37
+sarcasm: 1
+parent: North Korea's internet is offline; massive DDOS attack presumed
+
+text: At some point, Logan needs to take responsibility for his irresponsible attire and inciting violence with his hat
+subreddit: The_Donald
+score: 25
+sarcasm: 1
+parent: 9 Year Old Banned From Wearing "Make America Great Again" Hat for SAFETY CONCERNS
+
+text: Your team sucks
+subreddit: MaddenMobileForums
+score: 1
+sarcasm: 1
+parent: I Made Some Upgrades
+
+text: Classy af.
+subreddit: justneckbeardthings
+score: 1
+sarcasm: 1
+parent: The worst wedding photo ever
+
+text: This is not news and this is not legitimate fraud.
+subreddit: politics
+score: 11
+sarcasm: 0
+parent: They found VOTER FRAUD in Wisconsin, and, yes, it was a Republican.
+
+text: This is incredible, everyday we're seeing more people on the Bitcoin train.
+subreddit: Bitcoin
+score: 15
+sarcasm: 0
+parent: Jack Dorsey says Square will accept bitcoin
+
+text: I'm certain this will be of particular use to people studying mechanical engineering.
+subreddit: canada
+score: 3
+sarcasm: 1
+parent: University of Winnipeg makes indigenous course a requirement
+
+text: This is cool, and sorry to be a dick about it, but honestly it's 2016 and we should have been getting satellite imaging like this a long time ago.
+subreddit: space
+score: -5
+sarcasm: 0
+parent: Here's what the incredible leap in weather imaging is going to look like with the new GOES-R satellite
+
+text: A hat
+subreddit: anime
+score: 7
+sarcasm: 1
+parent: What is this?
+
+text: I wonder if they have a diorama of everyone drowning?
+subreddit: Christianity
+score: 14
+sarcasm: 0
+parent: BioLogos Responds to the "Ark Encounter"
+
+text: Or maybe just don't use facebook?
+subreddit: AdviceAnimals
+score: 12
+sarcasm: 0
+parent: Facebook Privacy
+
+text: Damn socialists!
+subreddit: todayilearned
+score: 2
+sarcasm: 1
+parent: TIL Every pregnant woman in Finland gets delivered a Maternity Box, which includes children's clothes and other necessary items, such as nappies, bedding, cloth, gauze towels, a blanket, crib sheets, and diapers.
+
+text: what a rough life
+subreddit: EDM
+score: -17
+sarcasm: 1
+parent: Drugs, sleeplessness, isolation: the downside of being a dance musician
+
+text: whoopee
+subreddit: toronto
+score: 4
+sarcasm: 0
+parent: New Apple Store coming to Toronto
+
+text: This is fake
+subreddit: aww
+score: 1
+sarcasm: 1
+parent: Cat Welcomes Home Soldier
+
+text: People eating with their mouth open.
+subreddit: AskReddit
+score: 2
+sarcasm: 1
+parent: Whats your favourite sound that most people don't like?
+
+text: The sun is gonna destroy us in a few billion years anyways, so why does it matter if we die out in the next few centuries?
+subreddit: politics
+score: 5
+sarcasm: 1
+parent: Gary Johnson Wants to Ignore Climate Change Because the Sun Will Destroy the Earth One Day
+
+text: man im such a boring and nondistinguishable individual that ill look for just about anything to claim im unique and different from the rest.
+subreddit: comics
+score: 5
+sarcasm: 1
+parent: Morning Ppl &amp; Night Ppl
+
+text: Make food
+subreddit: AskReddit
+score: -1
+sarcasm: 1
+parent: What does Britain do better than America?
+
+text: I've decided I don't like it when people "lose their shit".
+subreddit: ContagiousLaughter
+score: -8
+sarcasm: 0
+parent: Guys prank Texas A&amp;M's baseball team, lose their shit when it works
+
+text: I use Computer 10, but there are some things about Computer 7 I prefer.
+subreddit: pcmasterrace
+score: 60
+sarcasm: 0
+parent: This email I just received from our CEO
+
+text: And they immediately apologized to his family.
+subreddit: todayilearned
+score: 22
+sarcasm: 0
+parent: TIL that Icelandic Police have only ever killed one person
+
