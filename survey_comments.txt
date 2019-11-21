@@ -130,3 +130,14 @@ score: 22
 sarcasm: 0
 parent: TIL that Icelandic Police have only ever killed one person
 
+text: Happy Labor Day!
+subreddit: politics
+score: 5
+sarcasm: 1
+parent: 'Right to Work' constitutional amendment on November ballots in Virginia
+
+text: If they can do it in India, they can do it in America.
+subreddit: conspiracy
+score: 10
+sarcasm: 0
+parent: India just turned off mobile internet for 63 million citizens amid protests in Ahmedabad
