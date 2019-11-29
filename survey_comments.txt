@@ -141,3 +141,27 @@ subreddit: conspiracy
 score: 10
 sarcasm: 0
 parent: India just turned off mobile internet for 63 million citizens amid protests in Ahmedabad
+
+text: Misery loves company.
+subreddit: AskReddit
+score: 7
+sarcasm: 1
+parent: Why do some people think not having kids is "selfish"?
+
+text: Wow I think that is the most interesting things ive ever read on this sub
+subreddit: todayilearned
+score: 1
+sarcasm: 0
+parent: TIL Namco has a US patent on having mini-games inside of their game's loading screens; this is why most games have such boring loading screens
+
+text: It's clearly a Rolls Royce... Just look at the grill.
+subreddit: Shitty_Car_Mods
+score: 8
+sarcasm: 1
+parent: Poor Charger.
+
+text: Best actress, ever.
+subreddit: Celebs
+score: -8
+sarcasm: 1
+parent: Zooey Deschanel
