@@ -1,11 +1,13 @@
 import json
+import os
 
-folder = r"C:\Users\Chris\Documents\Final Year Project"
+folder = os.path.join(os.path.dirname(__file__),"../..")
 
 
 if __name__ == "__main__":
     sarc_comments = {}
     nonsarc_comments = {}
+    parents = {}
     orig_train = {}
     orig_test = {}
     
@@ -22,12 +24,15 @@ if __name__ == "__main__":
         if i >= 200:
             i = 0
             break
-        if "text" in v and "marker" in v:
+        if "text" in v:
             if v.get("marker") == "1":
                 sarc_comments[k] = v
                 i += 1
-            else:
+            elif v.get("marker") == "0":
                 nonsarc_comments[k] = v
+                i += 1
+            else:
+                parents[k] = v
                 i += 1
                 
     print("Training set read...")
@@ -39,20 +44,27 @@ if __name__ == "__main__":
             if v.get("marker") == "1":
                 sarc_comments[k] = v
                 i += 1
-            else:
+            elif v.get("marker") == "0":
                 nonsarc_comments[k] = v
+                i += 1
+            else:
+                parents[k] = v
                 i += 1
                 
     print("Test set read...")
                 
     sarc_json = json.dumps(sarc_comments)
     nonsarc_json = json.dumps(nonsarc_comments)
+    parent_json = json.dumps(parents)
     
-    f = open(folder+r"\sarc-comments.json","w")
+    f = open(os.path.join(folder,"sarc-comments.json"),"w")
     f.write(sarc_json)
     f.close()
-    g = open(folder+r"\nonsarc-comments.json","w")
+    g = open(os.path.join(folder,"nonsarc-comments.json"),"w")
     g.write(nonsarc_json)
     g.close()
+    h = open(os.path.join(folder,"parents.json"),"w")
+    h.write(parent_json)
+    h.close()
     
     print("Done")
