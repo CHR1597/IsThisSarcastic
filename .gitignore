@@ -1,6 +1,7 @@
 SARC/*
 Papers/*
 code/term2/__pycache__/
+code/sandbox/__pycache__/
 *.tex
 *.aux
 *.log
