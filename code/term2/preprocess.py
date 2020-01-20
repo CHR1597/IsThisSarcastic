@@ -2,12 +2,12 @@ import os
 import json
 import numpy as np
 import re
+from textblob import TextBlob
 
 folder = os.path.join(os.path.dirname(__file__),"../..")
 
 def preprocess(dict_obj):
     
-    #TODO: save preprocessed text as numpy array for topic modeller and apply that text to the json version for feature extraction
     
     newdict = {}    # Dictionary will be altered during preprocessing and saved here - required for feature extraction
     data = []       # Array will be converted to numpy array for topic modeller
@@ -22,7 +22,7 @@ def preprocess(dict_obj):
     for k,v in dict_obj.items():
         temp = v.get("text")
         temp = remove_sarctag.sub("",temp)
-        if len(temp) > 0 and "http" not in temp and "\\u" not in temp and len(v.get("parent").split()) == 1:
+        if len(temp) > 0 and "http" not in temp and "\\u" not in temp and len(v.get("parent").split()) == 1 and TextBlob(temp).detect_language() == "en":
             temp = remove_subreddit.sub("",temp)
             temp = remove_user_mention.sub("",temp)
             temp = remove_hashtags.sub("",temp)
