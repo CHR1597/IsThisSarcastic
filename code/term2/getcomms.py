@@ -11,10 +11,10 @@ if __name__ == "__main__":
     orig_train = {}
     orig_test = {}
     
-    with open(folder+r"\train-comments.json") as f:
+    with open(os.path.join(folder,"train-comments.json")) as f:
         orig_train = json.loads(f.read())
         
-    with open(folder+r"\test-comments.json") as f:
+    with open(os.path.join(folder,"test-comments.json")) as f:
         orig_test = json.loads(f.read())
         
     print("Comments read...")

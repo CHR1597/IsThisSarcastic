@@ -7,3 +7,4 @@ code/sandbox/__pycache__/
 *.log
 *.gz
 *.json
+**/praw.ini
