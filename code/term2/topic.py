@@ -7,7 +7,7 @@ from nltk.corpus import stopwords
 class topic(object):
 
     def __init__(self, nbtopic=100, alpha=1, model=None, dicttp=None):
-        self.nptopic = nbtopic
+        self.nbtopic = nbtopic
         self.porter = nltk.PorterStemmer()
         self.alpha = alpha
         self.stop = stopwords.words("english")+[".","!","?",'"',"...","\\","''","[","]","~","'m","'s",";",":","..","$"]

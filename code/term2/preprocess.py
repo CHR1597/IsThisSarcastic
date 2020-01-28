@@ -22,7 +22,7 @@ def preprocess(dict_obj):
     for k,v in dict_obj.items():
         temp = v.get("text")
         temp = remove_sarctag.sub("",temp)
-        if len(temp) > 0 and "http" not in temp and "\\u" not in temp and len(v.get("parent").split()) == 1 and TextBlob(temp).detect_language() == "en":
+        if len(temp) > 0 and "http" not in temp and "\\u" not in temp and len(v.get("parent").split()) == 1:
             temp = remove_subreddit.sub("",temp)
             temp = remove_user_mention.sub("",temp)
             temp = remove_hashtags.sub("",temp)

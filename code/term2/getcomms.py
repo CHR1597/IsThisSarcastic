@@ -1,5 +1,6 @@
 import json
 import os
+import praw
 
 folder = os.path.join(os.path.dirname(__file__),"../..")
 
@@ -11,20 +12,26 @@ if __name__ == "__main__":
     orig_train = {}
     orig_test = {}
     
+    reddit = praw.Reddit("project1")
+    
     with open(os.path.join(folder,"train-comments.json")) as f:
         orig_train = json.loads(f.read())
         
     with open(os.path.join(folder,"test-comments.json")) as f:
         orig_test = json.loads(f.read())
         
-    print("Comments read...")
     
-    i = 0
+    i = 1
     for k,v in orig_train.items():
-        if i >= 200:
-            i = 0
-            break
-        if "text" in v:
+        print(i, "comments read...",end="\r")
+        if "text" in v and v.get("parent") != "" and len(v.get("parent").split(" ")) == 1:
+            
+            sub = reddit.subreddit(v.get("subreddit"))
+            parent = reddit.submission(id=v.get("parent"))
+            
+            v["description"] = sub.public_description
+            v["parent_title"] = parent.title
+            
             if v.get("marker") == "1":
                 sarc_comments[k] = v
                 i += 1
@@ -35,12 +42,17 @@ if __name__ == "__main__":
                 parents[k] = v
                 i += 1
                 
-    print("Training set read...")
                 
     for k,v in orig_test.items():
-        if i >= 200:
-            break
-        if "text" in v:
+        print(i, "comments read...", end="\r")
+        if "text" in v and v.get("parent") != "":
+        
+            sub = reddit.subreddit(v.get("subreddit"))
+            parent = reddit.submission(id=v.get("parent"))
+            
+            v["description"] = sub.public_description
+            v["parent_title"] = parent.title
+            
             if v.get("marker") == "1":
                 sarc_comments[k] = v
                 i += 1
@@ -51,7 +63,8 @@ if __name__ == "__main__":
                 parents[k] = v
                 i += 1
                 
-    print("Test set read...")
+    print()
+    print("All comments read. Writing to file")
                 
     sarc_json = json.dumps(sarc_comments)
     nonsarc_json = json.dumps(nonsarc_comments)
