@@ -1,16 +1,19 @@
 import json
+import socket
 import os
 import praw
+import prawcore
 
 folder = os.path.join(os.path.dirname(__file__),"../..")
 
 
 if __name__ == "__main__":
-    sarc_comments = {}
-    nonsarc_comments = {}
+    new_train = {}
+    new_test = {}
     parents = {}
     orig_train = {}
     orig_test = {}
+    log = []
     
     reddit = praw.Reddit("project1")
     
@@ -20,64 +23,120 @@ if __name__ == "__main__":
     with open(os.path.join(folder,"test-comments.json")) as f:
         orig_test = json.loads(f.read())
         
-    
-    i = 1
-    for k,v in orig_train.items():
-        print(i, "comments read...",end="\r")
-        if "text" in v and v.get("parent") != "" and len(v.get("parent").split(" ")) == 1:
-            
-            sub = reddit.subreddit(v.get("subreddit"))
-            parent = reddit.submission(id=v.get("parent"))
-            
-            v["description"] = sub.public_description
-            v["parent_title"] = parent.title
-            
-            if v.get("marker") == "1":
-                sarc_comments[k] = v
-                i += 1
-            elif v.get("marker") == "0":
-                nonsarc_comments[k] = v
-                i += 1
-            else:
-                parents[k] = v
-                i += 1
-                
-                
-    for k,v in orig_test.items():
-        print(i, "comments read...", end="\r")
-        if "text" in v and v.get("parent") != "":
+    with open(os.path.join(folder,"train-comments-new.json")) as f:
+        new_train = json.loads(f.read())
         
-            sub = reddit.subreddit(v.get("subreddit"))
-            parent = reddit.submission(id=v.get("parent"))
-            
-            v["description"] = sub.public_description
-            v["parent_title"] = parent.title
-            
-            if v.get("marker") == "1":
-                sarc_comments[k] = v
+    with open(os.path.join(folder,"test-comments-new.json")) as f:
+        new_test = json.loads(f.read())
+        
+    i = 1
+    try:
+        for k,v in orig_train.items():
+            print(i, "comments read...",end="\r")
+            if k in new_train:
                 i += 1
-            elif v.get("marker") == "0":
-                nonsarc_comments[k] = v
-                i += 1
-            else:
-                parents[k] = v
-                i += 1
+                continue
                 
-    print()
-    print("All comments read. Writing to file")
+            if "text" in v and v.get("parent") != "" and len(v.get("parent").split(" ")) == 1:
                 
-    sarc_json = json.dumps(sarc_comments)
-    nonsarc_json = json.dumps(nonsarc_comments)
-    parent_json = json.dumps(parents)
+                try:
+                    sub = reddit.subreddit(v.get("subreddit"))
+                    parent = reddit.submission(id=v.get("parent"))
+                    
+                    v["description"] = sub.public_description
+                    v["parent_title"] = parent.title
+                    
+                    new_train[k] = v
+                    i += 1
+                    
+                except prawcore.exceptions.NotFound:
+                    log.append("Comment " + str(i) + " returned not found")
+                    i += 1
+                    continue
+                    
+                except prawcore.exceptions.Forbidden:
+                    log.append("Comment " + str(i) + " returned forbidden")
+                    try:
+                        sub.quaran.opt_in()
+                    
+                        v["description"] = sub.public_description
+                        v["parent_title"] = parent.title
+                        
+                        new_train[k] = v
+                        i += 1
+                        
+                    except prawcore.exceptions.Forbidden:
+                        log.append("Comment " + str(i) + " remains forbidden. Skipping.")
+                        i += 1
+                        continue
+                    
+                    
+        for k,v in orig_test.items():
+            print(i, "comments read...",end="\r")
+            if k in new_test:
+                i += 1
+                continue
+                
+            if "text" in v and v.get("parent") != "" and len(v.get("parent").split(" ")) == 1:
+                
+                try:
+                    sub = reddit.subreddit(v.get("subreddit"))
+                    parent = reddit.submission(id=v.get("parent"))
+                    
+                    v["description"] = sub.public_description
+                    v["parent_title"] = parent.title
+                    
+                    new_test[k] = v
+                    i += 1
+                    
+                except prawcore.exceptions.NotFound:
+                    log.append("Comment " + str(i) + " returned not found")
+                    i += 1
+                    continue
+                    
+                except prawcore.exceptions.Forbidden:
+                    log.append("Comment " + str(i) + " returned forbidden")
+                    try:
+                        sub.quaran.opt_in()
+                    
+                        v["description"] = sub.public_description
+                        v["parent_title"] = parent.title
+                        
+                        new_test[k] = v
+                        i += 1
+                        
+                    except prawcore.exceptions.Forbidden:
+                        log.append("Comment " + str(i) + " remains forbidden. Skipping.")
+                        i += 1
+                        continue
+                
+        print()
+        print("All comments read. Writing to file")
     
-    f = open(os.path.join(folder,"sarc-comments.json"),"w")
-    f.write(sarc_json)
-    f.close()
-    g = open(os.path.join(folder,"nonsarc-comments.json"),"w")
-    g.write(nonsarc_json)
-    g.close()
-    h = open(os.path.join(folder,"parents.json"),"w")
-    h.write(parent_json)
-    h.close()
+    except KeyboardInterrupt:
+        print()
+        print("Exiting...")
     
-    print("Done")
+    except socket.timeout:
+        print()
+        print("Socket timed out.")
+    
+    finally:
+        train_json = json.dumps(new_train)
+        test_json = json.dumps(new_test)
+        parent_json = json.dumps(parents)
+        
+        f = open(os.path.join(folder,"train-comments-new.json"),"w")
+        f.write(train_json)
+        f.close()
+        g = open(os.path.join(folder,"test-comments-new.json"),"w")
+        g.write(test_json)
+        g.close()
+        h = open(os.path.join(folder,"parents.json"),"w")
+        h.write(parent_json)
+        h.close()
+        with open(os.path.join(folder,"comment-logs.txt"),"w") as e:
+            for item in log:
+                e.write(item + "\n")
+    
+        print("Done")
