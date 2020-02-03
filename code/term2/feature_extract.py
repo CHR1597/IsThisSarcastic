@@ -19,7 +19,7 @@ print("Loading files...")
 porter = nltk.PorterStemmer()
 sentiments = senti_word_net.senti_word_net()
 
-def extract_features(comment, topic_modeller):
+def extract_features(comment, topic_modeller, include_reddit):
     features = {}
     sentence = comment["text"]
     #print("Comment:",sentence)
@@ -29,7 +29,8 @@ def extract_features(comment, topic_modeller):
     extract_pos(features, sentence)
     extract_capital(features, sentence)
     extract_topic(features, sentence, topic_modeller)
-    extract_reddit(features, comment)
+    if include_reddit:
+        extract_reddit(features, comment)
     
     return features
     
@@ -171,28 +172,16 @@ def extract_topic(features, sentence, topic_modeller):
         features["Topic :" + str(topics[j][0])] = topics[j][1]
         
 def extract_reddit(features, comment):
-    opted_in = False
-    reddit = praw.Reddit("project1")
     
-    subreddit = reddit.subreddit(comment["subreddit"])
-    while True:
-        try:
-            #print("Subreddit:",subreddit.display_name)
-            #print("Description:",subreddit.public_description)
-            extract_sentiment(features,subreddit.public_description,PostType.SUBREDDIT)
-            parent = reddit.submission(id=comment["parent"])
-            #print("Parent title:",parent.title)
-            extract_sentiment(features,parent.title,PostType.PARENT)
-            features["Comment/Subreddit contrast"] = np.abs(features["COMMENT Sentiment"] - features["SUBREDDIT Sentiment"])
-            features["Comment/Subreddit VADER contrast"] = np.abs(features["COMMENT VADER compound"] - features["SUBREDDIT VADER compound"])
-            features["Comment/Parent contrast"] = np.abs(features["COMMENT Sentiment"] - features["PARENT Sentiment"])
-            features["Comment/Parent VADER contrast"] = np.abs(features["COMMENT VADER compound"] - features["PARENT VADER compound"])
-            break
-        except prawcore.exceptions.Forbidden:
-            if opted_in:
-                #print(comment["subreddit"],": Subreddit no longer exists.",sep="")
-                break
-            subreddit.quaran.opt_in()   # Opt into quarantined subreddit
-            opted_in = True
-            continue
+    #print("Subreddit:",subreddit.display_name)
+    #print("Description:",subreddit.public_description)
+    extract_sentiment(features,comment["description"],PostType.SUBREDDIT)
+    #print("Parent title:",parent.title)
+    extract_sentiment(features,comment["parent_title"],PostType.PARENT)
+    features["score"] = comment["score"]
+    features["Comment/Subreddit contrast"] = np.abs(features["COMMENT Sentiment"] - features["SUBREDDIT Sentiment"])
+    features["Comment/Subreddit VADER contrast"] = np.abs(features["COMMENT VADER compound"] - features["SUBREDDIT VADER compound"])
+    features["Comment/Parent contrast"] = np.abs(features["COMMENT Sentiment"] - features["PARENT Sentiment"])
+    features["Comment/Parent VADER contrast"] = np.abs(features["COMMENT VADER compound"] - features["PARENT VADER compound"])
+            
         

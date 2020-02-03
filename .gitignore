@@ -8,5 +8,6 @@ code/sandbox/__pycache__/
 *.gz
 *.json
 *.npy
+*.p
 *.tp*
 **/praw.ini
