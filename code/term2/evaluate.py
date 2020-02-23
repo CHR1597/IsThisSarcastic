@@ -21,6 +21,5 @@ def score(comment):
     features_vec = vec.transform(features)
     print("Prediction: ",classifier.predict(features_vec))
     score = classifier.decision_function(features_vec)[0]
-    percentage = int(round(2.0*(2.0/(1.0+np.exp(-score))-0.5)*100.0))
     
-    return percentage
+    return score
