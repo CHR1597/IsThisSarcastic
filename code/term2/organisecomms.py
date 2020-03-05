@@ -21,7 +21,7 @@ if __name__ == "__main__":
     
     i = 0
     for k,v in orig_train.items():
-        if i >= 10000:
+        if i >= 50000:
             i = 0
             break
         if "text" in v:

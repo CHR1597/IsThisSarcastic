@@ -1,0 +1,166 @@
+Loading files...
+Preparing...
+Training topics...
+
+Extracting features...
+23414 sarcastic comments processed of 23414
+22238 non-sarcastic comments processed of 22238
+Generating vectorizer...
+Splitting features...
+Training...
+Trained. Saving...
+
+View test info? [y/n] y
+Most important features
+grams:
+contains(obvious) 1.2389558094692525
+contains(clearli) 1.210737463151318
+contains('m sure) 0.8844162578396774
+contains(omg) 0.868303064309527
+contains(becaus) 0.8646721981831563
+contains(yeah) 0.8490884491553283
+contains(shock) 0.8477468689284897
+contains(total) 0.8366992503982333
+contains(confirm) 0.8101601547907894
+contains(good thing) 0.774033778798192
+contains(fault) 0.7484558026186542
+contains(0/10) 0.7245558329370163
+contains(sure) 0.6842613771964682
+contains(!) 0.6816652411342161
+contains(racist) 0.6666330444672116
+contains(nah) 0.6350967907207181
+contains(must) 0.6306976987786473
+contains(so funni) 0.6186571493258857
+contains(yay) 0.6143624468702716
+contains(thank god) 0.6037199721796694
+contains(but) 0.603421564822199
+contains(wow) 0.6015840314264258
+contains(right ?) 0.5540881784844233
+contains(seen thi) 0.5530421100493186
+contains(how dare) 0.5519908055497353
+contains(music) 0.5401112192508314
+Topic :3 0.5350691434223455
+contains(privileg) 0.526620839533284
+contains(remov) 0.5191605697021345
+contains(what a) 0.5184204812791556
+contains(ye ,) 0.5142403933045787
+contains(guy ,) 0.5093751729150304
+contains(not enough) 0.5087110186266778
+contains(yea) 0.5002434467804832
+contains(of cours) 0.49309622281979415
+contains(proof) 0.49207551164309693
+contains(smh) 0.49089785761271026
+contains(fake) 0.4885449004968862
+contains(glad) 0.48796753507207613
+contains(heard) 0.48327777940625755
+contains(gee) 0.4802629173971772
+contains(dare) 0.4786271616814475
+contains(gay) 0.476081709019854
+contains(conspiraci) 0.4759180541288528
+contains(christian) 0.4738469902267516
+contains(definit) 0.47015277515205955
+contains(op ,) 0.4661444325562432
+contains(yeah ,) 0.46532950616663826
+contains(i bet) 0.4619625065991278
+contains(must be) 0.4611222193537824
+contains(, but) -0.9873432553973719
+contains(smile) -0.8802291008531558
+contains(lol) -0.8459505562606234
+contains(sad) -0.7261342497855591
+contains(lmao) -0.6681475102225454
+contains(fuck) -0.6584512669032911
+contains(pleas) -0.6495081900781464
+contains(pretti) -0.6028721163443416
+contains(:) -0.5884646778703716
+contains(') -0.5756837006847408
+contains(hope) -0.559405819041667
+contains(quit) -0.556600550713864
+contains(shit) -0.5448729859909871
+contains(i would) -0.5337535019270492
+contains(the onli) -0.532123406907688
+contains(hell) -0.4946908605406159
+contains(do you) -0.4946569634037566
+contains(.) -0.4902567278596807
+contains(actual) -0.4892567999124572
+contains(that wa) -0.4622186292723886
+contains(soon) -0.4581489379744477
+contains(feel like) -0.4429711853280726
+contains(stupid) -0.44071412675675664
+Topic :133 -0.43826762395325236
+contains(is .) -0.437516470095306
+contains(well ...) -0.4343248672853476
+contains(so ,) -0.42884850584772694
+contains(the guy) -0.4274418546525284
+contains(do they) -0.42708024544591533
+contains(happi) -0.42510562015800823
+contains(troll) -0.4238863832224234
+contains(is ,) -0.4186943335982699
+contains(pain) -0.4127787825965214
+contains(i had) -0.41215616738216454
+contains(honestli) -0.4101628366795729
+contains()) -0.409476362320586
+contains(ignor) -0.4090035971409959
+contains(dog) -0.4026279867941244
+contains(is it) -0.40169397373222704
+contains(also) -0.3993988026952745
+contains(question) -0.39565675977374093
+contains(and i) -0.3933728986207953
+contains(thing is) -0.39242882305044524
+contains(today) -0.3916230806890696
+contains(i 've) -0.39156404426421526
+contains(need to) -0.3910609722350512
+contains(a joke) -0.3886546091879497
+contains(``) -0.38537327405674054
+contains(no .) -0.3841868569313809
+contains(wear) -0.38153668457168705
+
+Sentiment:
+VADER positive -0.13639046490693368
+VADER positive 1/2 -0.03931153107206584
+VADER positive 2/2 -0.013362642614312555
+VADER positive 1/3 0.17660851404786526
+VADER positive 2/3 0.209001032140732
+VADER positive 3/3 0.22793252962288962
+VADER negative -0.08215293839755605
+VADER negative 1/2 0.23175637543330221
+VADER negative 2/2 0.13094475777979278
+VADER negative 1/3 0.2428395202232174
+VADER negative 2/3 0.25235838024487345
+VADER negative 3/3 0.010371283037575259
+SentiWordNet sentiment 0.07817424743024742
+Subjectivity 0.12749601042979147
+SentiWordNet sentiment 1/2 -0.056734616242508064
+SentiWordNet sentiment 2/2 -0.01371275422637342
+Subjectivity 1/2 0.18192891818866302
+Subjectivity 2/2 0.0025996585858614396
+SentiWordNet sentiment 1/3 0.020205867843415496
+SentiWordNet sentiment 2/3 0.05873304038361976
+SentiWordNet sentiment 3/3 0.05823005303640429
+Subjectivity 1/3 -0.017343632914227372
+Subjectivity 2/3 -0.009082749871532961
+Subjectivity 3/3 -0.11402886197853472
+Comment/subreddit contrast -0.05203827416803774
+Comment/subreddit VADER contrast 0.024160972658892096
+Comment/parent contrast 0.1142601304304471
+Comment/parent VADER contrast 0.17782383285177203
+
+topics:
+-0.43826762395325236 0.277*")" + 0.271*"(" + 0.097*"," + 0.065*"govern" + 0.065*"men" + 0.056*"boy" + 0.029*"cri" + 0.027*"given" + 0.024*"air" + 0.019*"feminist"
+-0.0665682681669267 0.204*"'d" + 0.176*"-" + 0.132*"mani" + 0.122*"video" + 0.088*"though" + 0.071*"," + 0.049*"caus" + 0.030*"blame" + 0.029*"especi" + 0.026*"quick"
+-0.05927990838888967 0.214*"'ll" + 0.150*"," + 0.138*"%" + 0.101*"win" + 0.095*"interest" + 0.046*"cours" + 0.044*"follow" + 0.042*"clinton" + 0.026*"sander" + 0.022*"tweet"
+-0.02578400374177834 0.374*"good" + 0.282*"use" + 0.158*"," + 0.028*"straight" + 0.026*"=" + 0.024*"okay" + 0.023*"drug" + 0.012*"blood" + 0.008*"violenc" + 0.008*"languag"
+-0.01229513742563606 0.593*"would" + 0.232*"take" + 0.032*"night" + 0.031*"piss" + 0.021*"street" + 0.019*"nobodi" + 0.013*"provid" + 0.008*"@" + 0.007*"sniper" + 0.000*"ever"
+-0.003201803001967938 0.274*"peopl" + 0.192*"think" + 0.149*"say" + 0.111*"," + 0.108*"post" + 0.032*"stuff" + 0.027*"definit" + 0.021*"front" + 0.021*"page" + 0.011*"relat"
+0.03498520660628206 0.721*"," + 0.097*"man" + 0.071*"made" + 0.023*"obvious" + 0.020*"beat" + 0.014*"creat" + 0.012*"femal" + 0.006*"beard" + 0.005*"sky" + 0.002*"evolut"
+0.035278804125167616 0.181*"big" + 0.165*"turn" + 0.115*"polic" + 0.086*"," + 0.085*"amp" + 0.082*"&" + 0.032*"arrest" + 0.032*"lane" + 0.031*"hype" + 0.029*"abus"
+0.15261329416948027 0.188*"type" + 0.173*"posit" + 0.159*"block" + 0.089*"w" + 0.039*"," + 0.039*"southern" + 0.009*"friday" + 0.008*"int" + 0.000*"point" + 0.000*"went"
+0.5350691434223455 0.308*"'" + 0.202*"seem" + 0.147*"show" + 0.072*"," + 0.058*"children" + 0.046*"parent" + 0.031*"toward" + 0.027*"return" + 0.012*"rage" + 0.012*"aggress"
+Validating
+               precision    recall  f1-score   support
+
+    Sarcastic       0.64      0.68      0.66      6614
+Non-Sarcastic       0.68      0.65      0.67      7081
+
+     accuracy                           0.66     13695
+    macro avg       0.66      0.66      0.66     13695
+ weighted avg       0.66      0.66      0.66     13695

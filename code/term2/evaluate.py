@@ -4,8 +4,8 @@ import os
 import feature_extract
 import topic
 
-vecpath = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "vecdict_9192_reddit.p"), "rb")
-classifpath = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "lr_9192_reddit.p"), "rb")
+vecpath = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "vecdict_45652_reddit.p"), "rb")
+classifpath = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "lr_45652_reddit.p"), "rb")
 
 vec = pickle.load(vecpath)
 classifier = pickle.load(classifpath)

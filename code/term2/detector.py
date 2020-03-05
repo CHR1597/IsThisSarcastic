@@ -1,6 +1,25 @@
+import re
 import praw
 import numpy as np
 import evaluate
+
+def preprocess(sentence):
+    remove_subreddit = re.compile(r"/?r/\w+\s?")
+    remove_user_mention = re.compile(r"/?u/\w+\s?")
+    remove_hashtags = re.compile(r"#\w+\s?")  
+    remove_sarctag = re.compile(r"\s+/s\b")
+    remove_sarcasm = re.compile(re.escape("sarcasm"),re.IGNORECASE)
+    remove_sarcastic = re.compile(re.escape("sarcastic"),re.IGNORECASE)
+    
+    temp = sentence
+    temp = remove_sarctag.sub("",temp)
+    temp = remove_subreddit.sub("",temp)
+    temp = remove_user_mention.sub("",temp)
+    temp = remove_hashtags.sub("",temp)
+    temp = remove_sarcasm.sub("",temp)
+    temp = remove_sarcastic.sub("",temp)
+    
+    return temp
 
 reddit = praw.Reddit("project2")
 dict_obj = {}
@@ -27,7 +46,7 @@ try:
                 else:
                     link = mention.body.split(" ")[1]
                     comm = reddit.comment(url=link)
-                dict_obj["text"] = comm.body
+                dict_obj["text"] = preprocess(comm.body)
                 dict_obj["score"] = comm.score
                 dict_obj["description"] = comm.subreddit.public_description
                 dict_obj["parent_title"] = comm.submission.title
@@ -79,8 +98,12 @@ try:
                 
             finally:
                 reply += "\n\n" + footer
-                if will_reply:
-                    mention.reply(reply)
-                mention.mark_read()
+                try:                
+                    if will_reply:
+                        mention.reply(reply)
+                    mention.mark_read()
+                except praw.exceptions.APIException:
+                    print("Rate limit - trying again")
+                    continue
 except KeyboardInterrupt:
     print("\nExiting.")

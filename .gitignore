@@ -11,3 +11,4 @@ code/sandbox/__pycache__/
 *.p
 *.tp*
 **/praw.ini
+~*.*
