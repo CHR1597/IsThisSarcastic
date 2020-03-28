@@ -3,6 +3,8 @@ Papers/*
 code/term2/__pycache__/
 code/sandbox/__pycache__/
 *.tex
+!project_report.tex
+*.toc
 *.aux
 *.log
 *.gz
