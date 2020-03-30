@@ -10,14 +10,14 @@
 \newcommand{\school}{School of Computer Science}
 
 
-\let\stdsection\section
-\renewcommand\section{\newpage\stdsection}
+
 
 \begin{document}
 \input{cover}
+\linespread{1.3}
 \input{abstract}
 \thispagestyle{empty}
-\clearpage
+\setcounter{tocdepth}{2}
 \tableofcontents
 \thispagestyle{empty}
 \clearpage
@@ -69,7 +69,6 @@ The rest of this section will explain the design of each section of the pipeline
 
 \subsection{Dataset}
 The dataset used for this project is the Self-Annotated Reddit Corpus (SARC) (Khodak et al., 2018). SARC provides large-scale sets of Reddit comments with markers for sarcasm representing ground truths. A comment is marked as sarcastic if the original comment included the annotation "/s". This is a conventional sarcasm marker for Reddit submissions, intended specifically to mitigate the ambiguity of sarcasm in text. For this project, I used a subset of 50,000 comments from SARC's \texttt{main-balanced} set. This set may include comments from any subreddit and has a balanced selection of sarcastic and non-sarcastic statements. SARC also offers an unbalanced set, where sarcastic statements make up $<$1\% of the data, a more realistic proportion, but I felt this would severely impact the classifier's ability to detect sarcastic statements.
-\newpage
 
 The unprocessed data from SARC contains the following information about a comment:
 \begin{itemize}
@@ -86,7 +85,6 @@ Preprocessing on this data is intended to remove features in the text that would
 
 \subsection{Feature extraction}
 Feature extraction is one of the key components of the training process. During training, features are extracted into a dictionary for each comment, which is appended to a list that becomes the target for the vectoriser that informs the classifier. The same feature extraction is performed when /u/IsThisSarcastic is summoned on Reddit, with the dictionary of features informing the classifier's decision function.
-\newpage
 Features extracted during this process are:
 \begin{itemize}
   \item N-grams
@@ -191,7 +189,7 @@ My early tests of the library were guided by Singh (2019), where I attempted to 
   \item Random Forest Classifier
 \end{itemize}
 
-The Gaussian Naive Bayes option was eliminated immediately, as its implementation in \texttt{scikit-learn} requires its input vectors to take the form of a dense matrix rather than the sparse matrix generated after feature extraction. Conversion of a sparse matrix to a dense matrix uses more memory than I had access to during development. However, this classifier performs the worst of the four in Singh (2019), and a Gaussian Naive Bayes approach is not mentioned in any of the other papers I rersearched. As such, I decided it would not be worth trying to make this approach work.
+The Gaussian Naive Bayes option was eliminated immediately, as its implementation in \texttt{scikit-learn} requires its input vectors to take the form of a dense matrix rather than the sparse matrix generated after feature extraction. Conversion of a sparse matrix to a dense matrix uses more memory than I had access to during development. In addition, this classifier performs the worst of the four in Singh (2019), and a Gaussian Naive Bayes approach is not mentioned in any of the other papers I rersearched. As such, I decided it would not be worth trying to make this approach work.
 
 I also opted to eliminate the Random Forest approach. It performed second-worst in Singh (2019), and again was not featured in any of the other research I performed. That left me with a choice between Linear SVC and Logistic Regression. These two classification models both have access to a \texttt{coef\_} attribute, which provides the coefficient of features in the decision function. This allows me to view the most and least important attributes in judging a comment as sarcastic. In addition, these two models are frequently used in other works, with Cliche (2014) using a Linear SVC model. With my goal for this project being to out-perform that solution, it made sense to use a similar model.
 
@@ -205,7 +203,27 @@ The experiments I performed used two different corpora based on subsets of my fi
 
 Perhaps unsurprisingly, all classifiers perform significantly better with a larger training set. However, what surprised me initially was that the addition of Reddit context actually made the performance worse, with the lowest-performing classifier being the Logistic Regression machine on 1000 comments with Reddit context. This classifier returned an F\textsubscript{1} score of 0.53 for the sarcastic category and 0.575 for non-sarcastic.
 
-With a larger corpus of 10,000 comments, the situation is quite different. The classifier versions that use Reddit context performed almost identically to those that do not. On average, a classifier with 10,000 comments is equally adept at detecting non-sarcastic comments with or without context, and is worse at detecting sarcasm by an F\textsubscript{1} score of 0.006. This negligible difference convinced me that a larger corpus made context more useful. In addition, a 10,000-comment corpus makes the Logistic Regression model outperform the Linear SVC model. At this point, the Linear SVC model often failed to fully converge despite having 5 times the maximum iterations of the Logistic Regression model. This would suggest that the Linear SVC model was unable to find the "most similar" comments in opposing classes in 10,000 attempts. The Logistic Regression model draws its decision boundary by taking every data point into account, so it did not have this problem. This may explain why the Logistic Regression model scored higher at this stage of testing, but I felt that the problem would only be exacerbated at the full scope of the corpus of 50,000 comments.
+With a larger corpus of 10,000 comments, the situation is quite different. The classifier versions that use Reddit context performed almost identically to those that do not. On average, a classifier with 10,000 comments is equally adept at detecting non-sarcastic comments with or without context, and is worse at detecting sarcasm by a margin of 0.006 F\textsubscript{1} score. This negligible difference convinced me that a larger corpus made context more useful. In addition, a 10,000-comment corpus makes the Logistic Regression model outperform the Linear SVC model. At this point, the Linear SVC model often failed to fully converge despite having 5 times the maximum iterations of the Logistic Regression model. This would suggest that the Linear SVC model was unable to find the "most similar" comments in opposing classes in 10,000 attempts. The Logistic Regression model draws its decision boundary by taking every data point into account, so it did not have this problem. This may explain why the Logistic Regression model scored higher at this stage of testing, but I felt that the problem would only be exacerbated at the full scope of the corpus of 50,000 comments.
+
+\subsection{Final Results}
+The final classifier uses a Logistic Regression model with a limited-memory BFGS solver, a $C$ of 0.1, and 2000 maximum iterations. Table \ref{tab:cmd3} presents the performance results of /u/IsThisSarcastic alongside human results, similar sarcasm detection approaches, and state-of-the-art deep learning approaches.
+
+\begin{table}[h!]
+\begin{tabular}{|c|c|c|c|l|}
+\hline
+\textbf{Classifier}                    & \textbf{Precision} & \textbf{Recall} & \textbf{F\textsubscript{1}} & \textbf{Accuracy} \\ \hline
+\textbf{Human}                         & 0.92               & 0.73            & 0.81                        & -                 \\ \hline
+\textbf{González-Ibáñez et al. (2011)} & -                  & -               & -                           & 0.65              \\ \hline
+\textbf{Cliche (2014)}                 & -                  & -               & 0.60                        & -                 \\ \hline
+\textbf{Tay et al. (2018)}             & 0.697              & 0.694           & 0.695                       & 0.699             \\ \hline
+\textbf{Hazarika et al. (2018)}        & -                  & -               & 0.77                        & 0.77              \\ \hline
+\textbf{/u/IsThisSarcastic}            & 0.64               & 0.68            & 0.66                        & 0.66              \\ \hline
+\end{tabular}
+\caption{Comparison of the performance between /u/IsThisSarcastic, human respondents to the survey, and various examples of previous work.}
+\label{tab:cmd3}
+\end{table}
+
+While I do not have full results for all of the previous solutions, what we can see from these results is that /u/IsThisSarcastic out-performs Cliche (2014) in F\textsubscript{1} score by 6 percentage points. It also has better accuracy than the seminal work from González-Ibáñez et al. (2011). In addition, /u/IsThisSarcastic scores within 4 percentage points of the state-of-the-art deep learning solution proposed by Tay et al. (2018). Perhaps unsurprisingly, the human respondents to my survey perform better than any automated solutions.
 
 \section{Discussion}
 
@@ -213,7 +231,7 @@ With a larger corpus of 10,000 comments, the situation is quite different. The c
 
 \section{References}
 
-
+\newpage
 \section{Appendices}
 
 \end{document}
