@@ -226,6 +226,11 @@ The final classifier uses a Logistic Regression model with a limited-memory BFGS
 While I do not have full results for all of the previous solutions, what we can see from these results is that /u/IsThisSarcastic out-performs Cliche (2014) in F\textsubscript{1} score by 6 percentage points. It also has better accuracy than the seminal work from González-Ibáñez et al. (2011). In addition, /u/IsThisSarcastic scores within 4 percentage points of the state-of-the-art deep learning solution proposed by Tay et al. (2018). Perhaps unsurprisingly, the human respondents to my survey perform better than any automated solutions.
 
 \section{Discussion}
+With the reported results of /u/IsThisSarcastic, I have met my goal of out-performing the supervised learning-based sarcasm detector designed by Cliche (2014). However, it is worth noting that during the classifier experiment phase, by the time I was testing with 10,000 comments I was already out-performing the F\textsubscript{1} score of 0.60 achieved by Cliche (2014). This would suggest that the performance gains of /u/IsThisSarcastic are not necessarily related to my inclusion of contextual information, but may instead be related to the corpus used or improvements to the \texttt{scikit-learn} libraries.
+
+However, the best-performing state-of-the-art solutions are those that model context. Indeed, the solution by Tay et al. (2018), the performance of which /u/IsThisSarcastic is less than 4 p.p. away from, is one of the few sarcasm detectors for social media posts that does not attempt to model context. In this way, we can broadly divide "sarcasm detectors" into categories of supervised learning and deep learning. In both of these categories, the solutions that model context perform better than those that do not.
+
+
 
 \section{Conclusion}
 
