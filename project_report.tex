@@ -3,9 +3,11 @@
 \usepackage{float}
 \usepackage{titling}
 \usepackage{titlesec}
+\usepackage[nottoc,notlot,notlof]{tocbibind}
 
 \title{Is This Sarcastic? A Reddit Bot for Detecting Sarcasm}
 \author{Christopher McVeigh}
+\newcommand{\supervisor}{Dr Phillip Smith}
 \newcommand{\degree}{BSc Computer Science}
 \newcommand{\school}{School of Computer Science}
 
@@ -25,9 +27,9 @@
 
 
 \section{Introduction}
-Sarcasm is defined as "a sharp, bitter, or cutting expression or remark; a bitter gibe or taunt"\footnote{Oxford English Dictionary}, typically involving irony on the part of the speaker. As such, sarcasm detection remains one of the biggest challenges in NLP (Cambria et al., 2017). We as humans are more likely to misunderstand a sarcastic statement in writing than if we hear it in person, making this problem even more challenging. In a face-to-face conversation, sarcasm can be signalled using an altered tone of voice or exaggerated gestures, but these characteristics of conversation are lost in written discourse such as social media.
+Sarcasm is defined as "a sharp, bitter, or cutting expression or remark; a bitter gibe or taunt"\footnote{Oxford English Dictionary}, typically involving irony on the part of the speaker. As such, sarcasm detection remains one of the biggest challenges in NLP \cite{cambriaSentimentAnalysisBig2017}. We as humans are more likely to misunderstand a sarcastic statement in writing than if we hear it in person, making this problem even more challenging. In a face-to-face conversation, sarcasm can be signalled using an altered tone of voice or exaggerated gestures, but these characteristics of conversation are lost in written discourse such as social media.
 
-One factor of sarcasm that remains present in online discussions is context. A sarcastic statement presumes that the listener has a certain level of familiarity with the topic of discussion, and that applies to written comments just as much as verbal statements. In practice, our ability to recognise sarcasm in writing involves a level of background knowledge, common sense, anaphora resolution, and logical reasoning that it is not feasible to emulate (Poria et al., 2017). However, when dealing with online comments, we are able to obtain some empirical context using the comment itself.
+One factor of sarcasm that remains present in online discussions is context. A sarcastic statement presumes that the listener has a certain level of familiarity with the topic of discussion, and that applies to written comments just as much as verbal statements. In practice, our ability to recognise sarcasm in writing involves a level of background knowledge, common sense, anaphora resolution, and logical reasoning that it is not feasible to emulate \cite{poriaDeeperLookSarcastic2017}. However, when dealing with online comments, we are able to obtain some empirical context using the comment itself.
 
 To illustrate how context can aid our ability to recognise sarcasm, I conducted a survey where respondents were shown a series of comments from Reddit\footnote{www.reddit.com}. They were initially presented with the comment's text and no further details, before being shown the subreddit\footnote{A community on Reddit for a dedicated subject} the comment was posted in; the comment's score as voted by other users; and the title of the original post being commented on. At each step, respondents would indicate whether they believed the given comment was sarcastic or not. One example was a comment reading \textit{"I'm certain this will be of particular use to people studying mechanical engineering."} 80.6\% of respondents believed this comment was non-sarcastic, but when told that the original post was titled \textit{"University of Winnipeg makes indigenous course a requirement"}, 95.9\% now believed that it was sarcastic. Nothing had changed about the original comment, but with the knowledge of the comment's original context, the majority ended up changing their minds.
 
@@ -36,19 +38,19 @@ For automated sarcasm detection, much influence has been placed on lexical, synt
 
 \section{Literature Review}
 \subsection{Sarcasm Detection}
-Automated sarcasm detection is still a relatively young topic of research, with a recent surge in interest due to the rise of social media allowing easier access to representative data. 
+Automated sarcasm detection is still a relatively young topic of research, with a recent surge in interest due to the rise of social media allowing easier access to representative data \cite{joshiAutomaticSarcasmDetection2016}.
 
-One early work was González-Ibáñez et al. (2011), who confirmed the difficulty of detecting sarcasm in text by running a support vector machine and a logistic regression machine over a corpus of Twitter posts (tweets). Their solution returns a maximum accuracy of 65.44\% for the problem of classifying sarcastic vs. non-sarcastic. They also conducted a similar study using human judges, whose maximum accuracy was 73\%. This inspired my decision to run a survey for human results.
+One early work was \cite{gonzalez-ibanezIdentifyingSarcasmTwitter2011}, who confirmed the difficulty of detecting sarcasm in text by running a support vector machine and a logistic regression machine over a corpus of Twitter posts (tweets). Their solution returns a maximum accuracy of 65.44\% for the problem of classifying sarcastic vs. non-sarcastic. They also conducted a similar study using human judges, whose maximum accuracy was 73\%. This inspired my decision to run a survey for human results.
 
-Twitter is often used for sarcasm detection corpora, such as in Bamman \& Smith (2015), which uses a logistic regression machine with context modelling based on the tweet's author as well as responses to the tweet. These features produce a very high accuracy of 85.1\%. Another high-accuracy result from a Twitter corpus comes from Poria et al. (2017), who used a pre-trained convolutional neural network for sentiment, emotion, and author personality. On a balanced corpus of sarcastic/non-sarcastic tweets, they attained an F\textsubscript{1} score of 0.97. Both of these high-scoring solutions use contextual features in their modelling, which helped to inform my position that using context would be beneficial.
+Twitter is often used for sarcasm detection corpora, such as in \cite{bammanContextualizedSarcasmDetection2015}, which uses a logistic regression machine with context modelling based on the tweet's author as well as responses to the tweet. These features produce a very high accuracy of 85.1\%. Another high-accuracy result from a Twitter corpus comes from \cite{poriaDeeperLookSarcastic2017}, who used a pre-trained convolutional neural network for sentiment, emotion, and author personality. On a balanced corpus of sarcastic/non-sarcastic tweets, they attained an F\textsubscript{1} score of 0.97. Both of these high-scoring solutions use contextual features in their modelling, which helped to inform my position that using context would be beneficial.
 
-The research that I found myself most "in competition" with was The Sarcasm Detector by Cliche (2014). This project uses lexical, syntactic, and semantic features including sentiment analysis and topic modelling to achieve an F\textsubscript{1} score of 0.60 on a support vector machine. This provided me with a realistic benchmark for my project, and presented my first goal - my classifier should out-score this one.
+The research that I found myself most "in competition" with was The Sarcasm Detector by \cite{clicheSarcasmDetector2014}. This project uses lexical, syntactic, and semantic features including sentiment analysis and topic modelling to achieve an F\textsubscript{1} score of 0.60 on a support vector machine. This provided me with a realistic benchmark for my project, and presented my first goal - my classifier should out-score this one.
 
-Automated sarcasm detectors based on Reddit corpora do exist, but are less common than Twitter-based solutions. Tay et al. (2018) produced the Multi-dimensional Intra-Attention Recurrent Network (MIARN), which focuses on the semantics between each word in the input sentence, but not any contextual information. Experiments on two subreddits - /r/movies and /r/technology\footnote{Subreddits are preceded by "/r/"} - produce F\textsubscript{1} scores of 0.695 and 0.691 respectively.
+Automated sarcasm detectors based on Reddit corpora do exist, but are less common than Twitter-based solutions. \cite{tayReasoningSarcasmReading2018} produced the Multi-dimensional Intra-Attention Recurrent Network (MIARN), which focuses on the semantics between each word in the input sentence, but not any contextual information. Experiments on two subreddits - /r/movies and /r/technology\footnote{Subreddits are preceded by "/r/"} - produce F\textsubscript{1} scores of 0.695 and 0.691 respectively.
 
-Ghosh et al. (2018) opted to model contextual data using conversations on a variety of platforms, with Reddit being one of them. They introduce a pair of Long Short-Term Memory (LSTM) networks, where one analyses the current turn (i.e. comment) and one analyses the prior turn (i.e. parent comment). On a Reddit corpus with sentence-level attentiveness, they report an F\textsubscript{1} score of 0.77 on the sarcastic class and 0.74 on the non-sarcastic class.
+\cite{ghoshSarcasmAnalysisUsing2018} opted to model contextual data using conversations on a variety of platforms, with Reddit being one of them. They introduce a pair of Long Short-Term Memory (LSTM) networks, where one analyses the current turn (i.e. comment) and one analyses the prior turn (i.e. parent comment). On a Reddit corpus with sentence-level attentiveness, they report an F\textsubscript{1} score of 0.77 on the sarcastic class and 0.74 on the non-sarcastic class.
 
-Finally, Hazarika et al. (2018) introduced CASCADE, a contextual sarcasm detector trained exclusively on a Reddit corpus. Their implementation of context involves building a personality profile for comment authors to establish an individual's writing style, as well as their "big five" personality traits of openness, conscientiousness, extraversion, agreeableness, and neuroticism. Using a convolutional neural network with this information, they report an F\textsubscript{1} score of 0.77 on a balanced corpus.
+Finally, \cite{hazarikaCASCADEContextualSarcasm2018} introduced CASCADE, a contextual sarcasm detector trained exclusively on a Reddit corpus. Their implementation of context involves building a personality profile for comment authors to establish an individual's writing style, as well as their "big five" personality traits of openness, conscientiousness, extraversion, agreeableness, and neuroticism. Using a convolutional neural network with this information, they report an F\textsubscript{1} score of 0.77 on a balanced corpus.
 
 \subsection{Reddit Bots}
 There are several examples of Reddit bots, though they are not traditionally published and often closed-source. A prominent example of a Reddit bot is /u/AutoModerator\footnote{https://www.reddit.com/wiki/automoderator}, an automated moderator developed by Reddit administrators that can perform basic moderator duties on any subreddit where it is enabled. For example, it can automatically remove a post if enough users report it, or comment on any posts with certain keywords in the title.
@@ -68,7 +70,7 @@ The rest of this section will explain the design of each section of the pipeline
 \end{figure}
 
 \subsection{Dataset}
-The dataset used for this project is the Self-Annotated Reddit Corpus (SARC) (Khodak et al., 2018). SARC provides large-scale sets of Reddit comments with markers for sarcasm representing ground truths. A comment is marked as sarcastic if the original comment included the annotation "/s". This is a conventional sarcasm marker for Reddit submissions, intended specifically to mitigate the ambiguity of sarcasm in text. For this project, I used a subset of 50,000 comments from SARC's \texttt{main-balanced} set. This set may include comments from any subreddit and has a balanced selection of sarcastic and non-sarcastic statements. SARC also offers an unbalanced set, where sarcastic statements make up $<$1\% of the data, a more realistic proportion, but I felt this would severely impact the classifier's ability to detect sarcastic statements.
+The dataset used for this project is the Self-Annotated Reddit Corpus (SARC) \cite{khodakLargeSelfAnnotatedCorpus2018}. SARC provides large-scale sets of Reddit comments with markers for sarcasm representing ground truths. A comment is marked as sarcastic if the original comment included the annotation "/s". This is a conventional sarcasm marker for Reddit submissions, intended specifically to mitigate the ambiguity of sarcasm in text. For this project, I used a subset of 50,000 comments from SARC's \texttt{main-balanced} set. This set may include comments from any subreddit and has a balanced selection of sarcastic and non-sarcastic statements. SARC also offers an unbalanced set, where sarcastic statements make up $<$1\% of the data, a more realistic proportion, but I felt this would severely impact the classifier's ability to detect sarcastic statements.
 
 The unprocessed data from SARC contains the following information about a comment:
 \begin{itemize}
@@ -98,7 +100,7 @@ Features extracted during this process are:
 Unigrams are formed by tokenising the comment's text using NLTK\footnote{https://www.nltk.org/}. Bigrams are formed using these tokens, and all n-grams are added to the feature dictionary.
 
 \subsubsection{Sentiment analysis}
-Sentiment is one of the major features extracted during this process. Two methods for scoring sentiment of a document are used in order to limit the impact of one scoring incorrectly. The first is SentiWordNet 3.0 (Baccianella et al., 2010), a project that assigns a positive and negative sentiment score to every word in WordNet\footnote{https://wordnet.princeton.edu/}. The second is VADER (Hutto \& Gilbert, 2014), a lexicon and rule-based tool designed for sentiment expression on social media, making it ideal for use with Reddit comments. VADER returns a value for positive, negative, neutral, and compound sentiment. For SentiWordNet, I record the difference between positive and negative sentiment for the input text, and for VADER I record all sentiment values. I also use TextBlob\footnote{https://textblob.readthedocs.io/en/dev/} to record the subjectivity of the text. This process is performed first over the comment as a whole, before splitting the comment in half and working on both halves, and finally again with the comment split into thirds. At the stages where the comment is split into parts, the contrast in sentiment between each part is also recorded.
+Sentiment is one of the major features extracted during this process. Two methods for scoring sentiment of a document are used in order to limit the impact of one scoring incorrectly. The first is SentiWordNet 3.0 \cite{baccianellaSENTIWORDNETEnhancedLexical2010}, a project that assigns a positive and negative sentiment score to every word in WordNet\footnote{https://wordnet.princeton.edu/}. The second is VADER \cite{huttoVADERParsimoniousRulebased2014}, a lexicon and rule-based tool designed for sentiment expression on social media, making it ideal for use with Reddit comments. VADER returns a value for positive, negative, neutral, and compound sentiment. For SentiWordNet, I record the difference between positive and negative sentiment for the input text, and for VADER I record all sentiment values. I also use TextBlob\footnote{https://textblob.readthedocs.io/en/dev/} to record the subjectivity of the text. This process is performed first over the comment as a whole, before splitting the comment in half and working on both halves, and finally again with the comment split into thirds. At the stages where the comment is split into parts, the contrast in sentiment between each part is also recorded.
 
 \subsubsection{Parts of speech}
 Using NLTK, the comment text is tagged with its parts of speech. The feature dictionary is then updated with the number of occurrences of nouns, adjectives, verbs, and adverbs.
@@ -162,7 +164,7 @@ The bot also includes a link to a feedback form in its reply. The intention here
 This section shows the results of all parts of this project. First is an analysis of the human respondents to the survey I conducted before starting development. Next is an overview of the experiments I conducted to find the optimal classifier for this problem. Finally, I examine the results I obtained from the final version of the classifier, comparing it to the earlier work I have mentioned and analysing potential error cases that prevent the classifier from scoring higher.
 
 \subsection{Survey Responses}
-As previously mentioned, I conducted a survey before starting development work to see how context affected our own ability to detect sarcasm\footnote{https://forms.gle/YAkc9tRhMVeVYJVt6}. From 98 respondents, I was able to generate precision, recall, and F\textsubscript{1} scores to find the average human performance on this task. Table \ref{tab:cmd2} shows the results for human respondents with and without context.
+As previously mentioned, I conducted a survey before starting development work to see how context affected our own ability to detect sarcasm\footnote{https://forms.gle/YAkc9tRhMVeVYJVt6}. For the full list of questions, see Appendix A. From 98 respondents, I was able to generate precision, recall, and F\textsubscript{1} scores to find the average human performance on this task. Table \ref{tab:cmd2} shows the results for human respondents with and without context.
 
 \begin{table}[h!]
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
@@ -181,7 +183,7 @@ From this data, we can see that the human respondents were better at detecting s
 \subsection{Classifier Experiments}
 The decision of which classifier to use was a major part of the development process. Very early in development, I decided the best suite of options would come from \texttt{scikit-learn} (Pedregosa et al., 2011). This was because it provided several classification models, including the support vector and logistic regression models I saw used in my prior research.
 
-My early tests of the library were guided by Singh (2019), where I attempted to use a limited corpus to train classifiers of the following types:
+My early tests of the library were guided by \cite{singhSarcasmDetectionStep2019}, where I attempted to use a limited corpus to train classifiers of the following types:
 \begin{itemize}
   \item Linear Support Vector Classifier (Linear SVC)
   \item Gaussian Naive Bayes
@@ -189,9 +191,9 @@ My early tests of the library were guided by Singh (2019), where I attempted to 
   \item Random Forest Classifier
 \end{itemize}
 
-The Gaussian Naive Bayes option was eliminated immediately, as its implementation in \texttt{scikit-learn} requires its input vectors to take the form of a dense matrix rather than the sparse matrix generated after feature extraction. Conversion of a sparse matrix to a dense matrix uses more memory than I had access to during development. In addition, this classifier performs the worst of the four in Singh (2019), and a Gaussian Naive Bayes approach is not mentioned in any of the other papers I rersearched. As such, I decided it would not be worth trying to make this approach work.
+The Gaussian Naive Bayes option was eliminated immediately, as its implementation in \texttt{scikit-learn} requires its input vectors to take the form of a dense matrix rather than the sparse matrix generated after feature extraction. Conversion of a sparse matrix to a dense matrix uses more memory than I had access to during development. In addition, this classifier performs the worst of the four in \cite{singhSarcasmDetectionStep2019}, and a Gaussian Naive Bayes approach is not mentioned in any of the other papers I rersearched. As such, I decided it would not be worth trying to make this approach work.
 
-I also opted to eliminate the Random Forest approach. It performed second-worst in Singh (2019), and again was not featured in any of the other research I performed. That left me with a choice between Linear SVC and Logistic Regression. These two classification models both have access to a \texttt{coef\_} attribute, which provides the coefficient of features in the decision function. This allows me to view the most and least important attributes in judging a comment as sarcastic. In addition, these two models are frequently used in other works, with Cliche (2014) using a Linear SVC model. With my goal for this project being to out-perform that solution, it made sense to use a similar model.
+I also opted to eliminate the Random Forest approach. It performed second-worst in \cite{singhSarcasmDetectionStep2019}, and again was not featured in any of the other research I performed. That left me with a choice between Linear SVC and Logistic Regression. These two classification models both have access to a \texttt{coef\_} attribute, which provides the coefficient of features in the decision function. This allows me to view the most and least important attributes in judging a comment as sarcastic. In addition, these two models are frequently used in other works, with \cite{clicheSarcasmDetector2014} using a Linear SVC model. With my goal for this project being to out-perform that solution, it made sense to use a similar model.
 
 The experiments I performed used two different corpora based on subsets of my final corpus. The first set of tests used 1000 comments, and the second used 10,000. The Linear SVC model had a regularisation ($C$) of 0.1 and a maximum iteration value of 10,000. The Logistic Regression model uses a limited-memory BFGS solver with a $C$ of 0.1 and 2000 maximum iterations. Both models were trained on each corpus, initially without extracting Reddit context. This gave a baseline result for how each classifier performed, before the Reddit context was introduced. Figure \ref{fig:cmd5} shows the results of this testing with 5-fold cross-validation.
 
@@ -213,30 +215,138 @@ The final classifier uses a Logistic Regression model with a limited-memory BFGS
 \hline
 \textbf{Classifier}                    & \textbf{Precision} & \textbf{Recall} & \textbf{F\textsubscript{1}} & \textbf{Accuracy} \\ \hline
 \textbf{Human}                         & 0.92               & 0.73            & 0.81                        & -                 \\ \hline
-\textbf{González-Ibáñez et al. (2011)} & -                  & -               & -                           & 0.65              \\ \hline
-\textbf{Cliche (2014)}                 & -                  & -               & 0.60                        & -                 \\ \hline
-\textbf{Tay et al. (2018)}             & 0.697              & 0.694           & 0.695                       & 0.699             \\ \hline
-\textbf{Hazarika et al. (2018)}        & -                  & -               & 0.77                        & 0.77              \\ \hline
-\textbf{/u/IsThisSarcastic}            & 0.64               & 0.68            & 0.66                        & 0.66              \\ \hline
+\textbf{\cite{gonzalez-ibanezIdentifyingSarcasmTwitter2011}} & -                  & -               & -                           & 0.65              \\ \hline
+\textbf{\cite{clicheSarcasmDetector2014}}                 & -                  & -               & 0.60                        & -                 \\ \hline
+\textbf{\cite{tayReasoningSarcasmReading2018}}             & 0.697              & 0.694           & 0.695                       & 0.699             \\ \hline
+\textbf{\cite{hazarikaCASCADEContextualSarcasm2018}}        & -                  & -               & 0.77                        & 0.77              \\ \hline
+\textbf{/u/IsThisSarcastic}            & \textbf{0.64}               & \textbf{0.68}            & \textbf{0.66}                        & \textbf{0.66}              \\ \hline
 \end{tabular}
 \caption{Comparison of the performance between /u/IsThisSarcastic, human respondents to the survey, and various examples of previous work.}
 \label{tab:cmd3}
 \end{table}
 
-While I do not have full results for all of the previous solutions, what we can see from these results is that /u/IsThisSarcastic out-performs Cliche (2014) in F\textsubscript{1} score by 6 percentage points. It also has better accuracy than the seminal work from González-Ibáñez et al. (2011). In addition, /u/IsThisSarcastic scores within 4 percentage points of the state-of-the-art deep learning solution proposed by Tay et al. (2018). Perhaps unsurprisingly, the human respondents to my survey perform better than any automated solutions.
+While I do not have full results for all of the previous solutions, what we can see from these results is that /u/IsThisSarcastic out-performs \cite{clicheSarcasmDetector2014} in F\textsubscript{1} score by 6 percentage points. It also has better accuracy than the seminal work from \cite{gonzalez-ibanezIdentifyingSarcasmTwitter2011}. In addition, /u/IsThisSarcastic scores within 4 percentage points of the state-of-the-art deep learning solution proposed by \cite{tayReasoningSarcasmReading2018}. Perhaps unsurprisingly, the human respondents to my survey perform better than any automated solutions.
 
 \section{Discussion}
-With the reported results of /u/IsThisSarcastic, I have met my goal of out-performing the supervised learning-based sarcasm detector designed by Cliche (2014). However, it is worth noting that during the classifier experiment phase, by the time I was testing with 10,000 comments I was already out-performing the F\textsubscript{1} score of 0.60 achieved by Cliche (2014). This would suggest that the performance gains of /u/IsThisSarcastic are not necessarily related to my inclusion of contextual information, but may instead be related to the corpus used or improvements to the \texttt{scikit-learn} libraries.
+This section serves as my personal response to the development and results of this project.
 
-However, the best-performing state-of-the-art solutions are those that model context. Indeed, the solution by Tay et al. (2018), the performance of which /u/IsThisSarcastic is less than 4 p.p. away from, is one of the few sarcasm detectors for social media posts that does not attempt to model context. In this way, we can broadly divide "sarcasm detectors" into categories of supervised learning and deep learning. In both of these categories, the solutions that model context perform better than those that do not.
+\subsection{Analysis of Results}
+With the reported results of /u/IsThisSarcastic, I have met my goal of out-performing the supervised learning-based sarcasm detector designed by \cite{clicheSarcasmDetector2014}. However, it is worth noting that during the classifier experiment phase, by the time I was testing with 10,000 comments I was already out-performing the F\textsubscript{1} score of 0.60 achieved by \cite{clicheSarcasmDetector2014}. This would suggest that the performance gains of /u/IsThisSarcastic are not necessarily related to my inclusion of contextual information, but may instead be related to the corpus used or improvements to the \texttt{scikit-learn} libraries.
 
+However, the best-performing state-of-the-art solutions are those that model context. Indeed, the solution by \cite{tayReasoningSarcasmReading2018}, the performance of which /u/IsThisSarcastic is less than 4 percentage points away from, is one of the few sarcasm detectors for social media posts that does not attempt to model context. In this way, we can broadly divide "sarcasm detectors" into categories of supervised learning and deep learning. In both of these categories, the solutions that model context perform better than those that do not.
 
+One difference between the style of context modelling I chose and that used by solutions like CASCADE \cite{hazarikaCASCADEContextualSarcasm2018} is that I opted to emulate the "context" a human reader would be likely to establish when reading a Reddit comment. This led me to focus on a comment's score, the post being commented on, and the subreddit the post is on. State-of-the-art solutions such as CASCADE and \cite{poriaDeeperLookSarcastic2017} instead opt to model context using personality analysis of comment authors. This approach better emulates the way we use sarcasm in person, where we learn what someone might be likely to say in earnest over time to establish what their "version" of sarcasm sounds like. However, I decided that this style of context modelling was not only well-explored already, but was also somewhat unrealistic for comparison to human performance. The average Reddit user will probably not view the profile of a comment author to establish their personality if there are more immediately available context clues to inform whether the comment was sarcastic. In addition, performing contextual analysis in this way is very time-consuming when dealing with Reddit, as their API has a strict rate limit of 30 requests per minute. CASCADE's implementation involves retrieving every comment made by a user to form their personality map. With some users making thousands of comments, this process could take several hours purely through API rate limits. This would also limit /u/IsThisSarcastic's usability as a summonable Reddit bot, as every comment written by the user in question would need to be analysed, rather than the current implementation which requires significantly less information from Reddit.
+
+User feedback is another factor in the results from /u/IsThisSarcastic. Readers can use the survey linked in each of the bot's comments to leave feedback on its decisions. This is intended to use the as-yet unbeaten human capability for detecting sarcasm to add new comments to a potential future dataset, thereby improving the bot's accuracy. The survey is naturally ever-evolving, but at time of writing, the survey would indicate that, in practice, the bot is only accurate 25\% of the time. This represents a large discrepancy with the reported performance over the full corpus. I believe this is down to two factors: firstly, most users will not bother leaving feedback, especially if the bot's comment is just part of a conversation they were already reading; secondly, when a user is compelled to leave feedback, it is probably because they disagree with the bot's judgement. These problems may be because there is no individual benefit to a user for leaving feedback, so the natural response bias that causes extreme opinions to be more prevalent in survey respondents means that there are relatively few total responses, and those that do exist are mostly negative.
+
+\subsection{Reflection on Development}
+This is not to say that /u/IsThisSarcastic is without limitations, of course. A more specialised, custom deep learning approach would appear to give better final results, but I opted to go with \texttt{scikit-learn} implementations instead. This is because I was already entering new personal territory with machine learning, and felt that the time required to learn enough theory to propose a novel approach would impact my ability to develop a working system.
+
+I would say my lack of experience in the area of machine learning is the main limitation of this project. I spent a lot of time in the early development stages making assumptions about how supervised classifiers work, mainly in that my initial plan was to alter the \texttt{scikit-learn} classifier implementations to have them accept context for me. I realised this idea would not work before attempting it, but it was still what I expected to do as late as December.
+
+As a result, much of the real development for this project took place after Christmas, with very little work from before then actually featuring in the final code. I feel that if I had been more aware earlier on of what this project would require, I could have had more time to develop the specifics of the machine learning side.
+
+While the Reddit implementation went more smoothly, there are still some limitations imposed by working with a third-party API. During development, the major hurdle was the aforementioned rate limiting. The additions I needed to make to the SARC dataset required multiple connections to Reddit for each comment in the corpus. PRAW approximates adherence to the rate limit by limiting requests to one every two seconds, so for the corpus of 50,000 comments I used where each required five requests to Reddit, I had to spend almost six full days appending to the dataset.
+
+The requirements of working with the Reddit API also impacted the running of the bot itself, which is another area I would like to improve. Currently, /u/IsThisSarcastic is registered with Reddit as a script app. This means that it should run on only one system for personal administration. As a result, I have to run the process on my machine to have the bot reply to any comments. Ideally, I would like the bot to run on a web server for constant accessibility. This would also allow a custom method for linking feedback to a specific comment, rather than the current implementation of a Google Forms survey. However, this implementation would have required me to register with Reddit as a web app, which would have needed me to develop the site first as Reddit requires web apps to register with an existing domain. I felt that my priority was getting a working bot first, so this was not possible in time.
+
+With these limitations and improvements in mind, I am generally satisfied with the development and results of this project. I believe I have developed a system that pairs well with its intended use as a Reddit bot to perform multifaceted but lightweight sarcasm detection on arbitrary documents with an encouraging level of success.
 
 \section{Conclusion}
+This project introduced /u/IsThisSarcastic, an autonomous Reddit bot that can be summoned to deduce whether any given comment is sarcastic or not. It extracts lexical, syntactic, and semantic information from the comment's text, and contextual information from the Reddit environment. Using a Logistic Regression classifier trained on a corpus of Reddit comments, /u/IsThisSarcastic out-performs similar supervised learning-based sarcasm detectors, and approaches the performance of some state-of-the-art deep learning solutions. This shows that the contextual information that improves human ability to discern sarcasm can also impact the abilities of automated sarcasm detectors.
+\clearpage
 
-\section{References}
+\begin{footnotesize}
+\bibliography{references}
+\bibliographystyle{apalike}
+\end{footnotesize}
 
 \newpage
-\section{Appendices}
+\pagenumbering{arabic}
+\renewcommand*{\thepage}{A\arabic{page}}
+\appendix
+\section{Survey questions}
+\begin{enumerate}
+	\item "Wow I wonder who could be behind this?"
+	\begin{itemize}
+		\item Subreddit: worldnews
+		\item Description: "/r/worldnews is for major news from around the world except US-internal news / US politics"
+		\item Score: 37
+		\item Post: "North Korea's internet is offline; massive DDOS attack presumed"
+	\end{itemize}
+
+	\item "This is incredible, everyday we're seeing more people on the Bitcoin train."
+	\begin{itemize}
+		\item Subreddit: Bitcoin
+		\item Description: "Bitcoin is the currency of the Internet: a distributed, worldwide, decentralized digital money."
+		\item Score: 15
+		\item Post: "Jack Dorsey says Square will accept bitcoin"
+	\end{itemize}
+
+	\item "Best actress, ever."
+	\begin{itemize}
+		\item Subreddit: Celebs
+		\item Description: "For beautiful female celebrities."
+		\item Score: -8
+		\item Post: "Zooey Deschanel"
+	\end{itemize}
+
+	\item "I'm certain this will be of particular use to people studying mechanical engineering."
+	\begin{itemize}
+		\item Subreddit: canada
+		\item Description: "Canada - the country, people, culture, and yeah, the hockey, snow and all things Canadian."
+		\item Score: 3
+		\item Post: "University of Winnipeg makes indigenous course a requirement"
+	\end{itemize}
+
+	\item "what a rough life"
+	\begin{itemize}
+		\item Subreddit: EDM
+		\item Description: "The front page of the internet's home for all things EDM."  [EDM = Electronic Dance Music]
+		\item Score: -17
+		\item Post: "Drugs, sleeplessness, isolation: the downside of being a dance musician"
+	\end{itemize}
+
+	\item "If they can do it in India, they can do it in America."
+	\begin{itemize}
+		\item Subreddit: conspiracy
+		\item Description: "We hope to challenge issues which have captured the public’s imagination, from JFK and UFOs to 9/11."
+		\item Score: 10
+		\item Post: "India just turned off mobile internet for 63 million citizens amid protests in Ahmedabad"
+	\end{itemize}
+
+	\item "It's clearly a Rolls Royce... Just look at the grill."
+	\begin{itemize}
+		\item Subreddit: Shitty\_Car\_Mods
+		\item Description: "Post pictures of cars with terrible mods"
+		\item Score: 8
+		\item Post: "Poor Charger."
+	\end{itemize}
+
+	\item "The sun is gonna destroy us in a few billion years anyways, so why does it matter if we die out in the next few centuries?"
+	\begin{itemize}
+		\item Subreddit: politics
+		\item Description: "/r/Politics is for news and discussion about U.S. politics."
+		\item Score: 5
+		\item Post: "Gary Johnson Wants to Ignore Climate Change Because the Sun Will Destroy the Earth One Day"
+	\end{itemize}
+
+	\item "Wow I think that is the most interesting things ive ever read on this sub"
+	\begin{itemize}
+		\item Subreddit: todayilearned
+		\item Description: "You learn something new every day; what did you learn today?"
+		\item Score: 1
+		\item Post: "TIL Namco has a US patent on having mini-games inside of their game's loading screens; this is why most games have such boring loading screens"
+	\end{itemize}
+
+	\item "Misery loves company."
+	\begin{itemize}
+		\item Subreddit: AskReddit
+		\item Description: "r/AskReddit is the place to ask and answer thought-provoking questions."
+		\item Score: 7
+		\item Post: "Why do some people think not having kids is "selfish"?"
+	\end{itemize}
+\end{enumerate}
+
 
 \end{document}
