@@ -1,3 +1,5 @@
+"""Replace emoticons with textual representations and extend abbreviations."""
+
 import nltk
 import re
 

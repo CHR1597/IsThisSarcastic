@@ -1,3 +1,8 @@
+"""Extract lexical, syntactic, semantic, and contextual features.
+
+This module builds the dictionary of features that forms the target for training.
+"""
+
 from enum import Enum
 import nltk
 import string
@@ -9,6 +14,7 @@ import numpy as np
 from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
+"""An enum type for marking which type of text is being processed."""
 class PostType(Enum):
     COMMENT = 1
     SUBREDDIT = 2
@@ -19,6 +25,16 @@ print("Loading files...")
 porter = nltk.PorterStemmer()
 sentiments = senti_word_net.senti_word_net()
 
+"""The main function for extracting all features.
+
+Arguments:
+comment        -- The dictionary for the comment being extracted.
+topic_modeller -- The saved topic modeller for extracting topic information.
+include_reddit -- Whether or not to extract contextual information.
+
+Returns:
+features -- The complete dictionary of features for this comment.
+"""
 def extract_features(comment, topic_modeller, include_reddit):
     features = {}
     sentence = comment["text"]
@@ -33,7 +49,13 @@ def extract_features(comment, topic_modeller, include_reddit):
         extract_reddit(features, comment)
     
     return features
-    
+
+"""Generate unigrams and bigrams from the comment text.
+
+Arguments:
+features -- The feature dictionary to be appended.
+sentence -- The comment text.
+"""    
 def extract_ngrams(features, sentence):
     sentence_reg = expr_replace.replace_general(sentence)
     
@@ -45,7 +67,14 @@ def extract_ngrams(features, sentence):
     
     for t in grams:
         features["contains(%s)" % t] = 1.0
-        
+
+"""Extract sentiment and subjectivity from the text.
+
+Arguments:
+features  -- The feature dictionary to be appended.
+sentence  -- The text.
+post_type -- Indicates whether a comment, subreddit, or post title is being extracted.
+"""        
 def extract_sentiment(features, sentence, post_type):
     prefix = post_type.name+" "
     analyser = SentimentIntensityAnalyzer()
@@ -149,6 +178,12 @@ def extract_sentiment(features, sentence, post_type):
                                                          - features[prefix+"VADER compound 2/3"] 
                                                          - features[prefix+"VADER compound 3/3"])
     
+"""Tally the parts of speech present in a comment.
+
+Arguments:
+features -- The feature dictionary to be appended.
+sentence -- The comment text.
+"""
 def extract_pos(features, sentence):
     sentence_pos = expr_replace.replace_emotion(sentence)
     tokens = nltk.word_tokenize(sentence_pos)
@@ -157,6 +192,12 @@ def extract_pos(features, sentence):
     for j in range(len(pos_vector)):
         features["POS" + str(j+1)] = pos_vector[j]
         
+"""Establish whether capitalisation is a factor in the comment.
+
+Arguments:
+features -- The feature dictionary to be appended.
+sentence -- The comment text.
+"""
 def extract_capital(features, sentence):
     counter = 0
     threshold = 4
@@ -164,6 +205,13 @@ def extract_capital(features, sentence):
         counter += int(sentence[j].isupper())
     features["Capitalisation"] = int(counter >= threshold)
     
+"""Generate topic information for the comment.
+
+Arguments:
+features       -- The feature dictionary to be appended.
+sentence       -- The comment text.
+topic_modeller -- The saved topic modeller.
+"""
 def extract_topic(features, sentence, topic_modeller):
     topics = topic_modeller.transform(sentence)
     
@@ -171,6 +219,12 @@ def extract_topic(features, sentence, topic_modeller):
         #print("Topic details:",topic_modeller.get_topic(topics[j][0]))
         features["Topic :" + str(topics[j][0])] = topics[j][1]
         
+"""Extract features relating to Reddit context.
+
+Arguments:
+features -- The feature dictionary to be appended.
+comment  -- The dictionary of the comment information.
+"""
 def extract_reddit(features, comment):
     
     #print("Subreddit:",subreddit.display_name)

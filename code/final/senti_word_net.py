@@ -1,10 +1,34 @@
+"""Set up functions for WordNet and SentiWordNet.
+
+Classes:
+senti_word_net -- The class handling these functions.
+"""
+
 import csv, collections, os
 import nltk
 import numpy as np
 
 folder = os.path.join(os.path.dirname(__file__),"../..")
 
+"""Perform operations for SentiWordNet.
+
+This class handles operations relating to SentiWordNet, a project that assigns a
+sentiment score to every word in WordNet.
+
+Methods:
+__init__       -- Constructor for the class.
+score_word     -- Score a single word.
+score_sentence -- Score a sentence.
+score          -- Calculate the score for a word.
+posvector      -- Tally the parts of speech present in a sentence.
+"""
 class senti_word_net(object):
+
+    """Constructor for the class.
+    
+    The class is initialised by reading the SentiWordNet file and setting up a local dictionary
+    mapping words to sentiment scores.
+    """
     def __init__(self):
         sent_scores = collections.defaultdict(list)
         
@@ -33,10 +57,26 @@ class senti_word_net(object):
             
         self.sent_scores = sent_scores
         
+    """Score a single word.
+    
+    Arguments:
+    word -- The word to be scored.
+    
+    Returns:
+    The sentiment score for that word.
+    """
     def score_word(self, word):
         pos = nltk.pos_tag([word])[0][1]
         return self.score(word,pos)
         
+    """Score a sentence.
+    
+    Arguments:
+    sentence -- The sentence to be scored.
+    
+    Returns:
+    mean_score -- The average score of the sentence based on each word.
+    """
     def score_sentence(self, sentence):
         pos = nltk.pos_tag(sentence)
         mean_score = np.array([0.0,0.0])
@@ -45,6 +85,15 @@ class senti_word_net(object):
             
         return mean_score
         
+    """Calculate the score for a word.
+    
+    Arguments:
+    word -- The word itself.
+    pos  -- The part of speech for that word - for possible ambiguities.
+    
+    Returns:
+    The positive and negative sentiment score for that word in the dictionary, or zeroes if not present.
+    """
     def score(self, word, pos):
         if pos[0:2] == "NN":
             pos_type = "n"
@@ -66,7 +115,15 @@ class senti_word_net(object):
                 return np.array([0.0,0.0])
         else:
             return np.array([0.0,0.0])
-            
+    
+    """Tally the parts of speech present in a sentence.
+    
+    Arguments:
+    sentence -- The sentence in question.
+    
+    Returns:
+    vector -- The count of nouns, adjectives, verbs, and adverbs in the sentence.
+    """
     def posvector(self, sentence):
         pos_vector = nltk.pos_tag(sentence)
         vector = np.zeros(4)

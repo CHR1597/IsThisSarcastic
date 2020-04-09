@@ -1,3 +1,9 @@
+"""Divide training data into sarcastic and non-sarcastic categories.
+
+This file takes the comment data appended with Reddit information and divides it according
+to its sarcasm marker. This allows for a later division of the data into separate train/test sets.
+"""
+
 import json
 import os
 
@@ -36,7 +42,9 @@ if __name__ == "__main__":
                 i += 1
                 
     print("Training set read...")
-                
+    
+    ## orig_train is not at full capacity, so this step is not necessary.
+    
     # for k,v in orig_test.items():
         # if i >= 300:
             # break

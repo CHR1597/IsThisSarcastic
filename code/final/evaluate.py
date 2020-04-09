@@ -1,3 +1,9 @@
+"""Evaluate whether an arbitrary Reddit comment is sarcastic using the saved classifier and feature vector.
+
+Functions:
+score -- Classify a comment as sarcastic or not.
+"""
+
 import numpy as np
 import pickle
 import os
@@ -15,7 +21,12 @@ classifpath.close()
 
 topic_mod = topic.topic(model = os.path.join(os.path.dirname(os.path.realpath(__file__)), "topics.tp"),\
                         dicttp = os.path.join(os.path.dirname(os.path.realpath(__file__)), "topics_dict.tp"))
-                        
+
+"""Classify a comment as sarcastic or not.
+
+Arguments:
+comment -- The dictionary format for the comment to be scored.
+"""                        
 def score(comment):
     features = feature_extract.extract_features(comment, topic_mod, True)
     features_vec = vec.transform(features)

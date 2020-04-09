@@ -1,3 +1,15 @@
+"""Train a new classifier on the processed comment data.
+
+This script creates a topic modeller, extracts features from the dataset, and
+uses those features to train a new classifier. A report is printed after training.
+
+Usage:
+train.py <include_reddit> <classif_type>
+where:
+include_reddit -- 0 to skip Reddit context, 1 to include.
+classif_type   -- 1 for a Linear SVC classifier, 2 for a Logistic Regression classifier.
+"""
+
 import os
 import sys
 import random

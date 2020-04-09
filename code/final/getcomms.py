@@ -1,3 +1,10 @@
+"""Add extra information to SARC dataset.
+
+This file takes the pre-existing SARC training and test sets, and for each top-level comment in the set,
+appends information from Reddit; its parent post's title and the description of the subreddit it was
+posted in.
+"""
+
 import json
 import socket
 import os

@@ -1,3 +1,10 @@
+"""Preprocess the comment data in preparation for training.
+
+This file removes comments from the final dataset if they are empty or contain web links or non-Unicode
+characters. It also removes subreddits, usernames, hashtags, sarcasm tags, and mentions of sarcasm from
+all comments.
+"""
+
 import os
 import json
 import numpy as np
@@ -6,6 +13,16 @@ from textblob import TextBlob
 
 folder = os.path.join(os.path.dirname(__file__),"../..")
 
+"""Process full comment data.
+
+Arguments:
+dict_obj -- The dictionary object of full comment data.
+
+Returns:
+newdict -- The dictionary made of only valid comments with text that would confuse the classifier removed.
+data    -- A numpy array of comment text for use with the topic modeller.
+length  -- The number of words in the final set of comment data.
+"""
 def preprocess(dict_obj):
     
     

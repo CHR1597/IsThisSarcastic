@@ -2,13 +2,13 @@ SARC/*
 Papers/*
 code/final/__pycache__/
 code/archive/sandbox/__pycache__/
-*.tex
-!project_report.tex
 *.toc
 *.aux
 *.log
 *.gz
 *.json
+!sarc-comments.json
+!nonsarc-comments.json
 *.npy
 *.p
 *.tp*

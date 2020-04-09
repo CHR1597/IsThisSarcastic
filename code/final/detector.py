@@ -1,8 +1,22 @@
+"""Run the Reddit bot to monitor for summons and reply to requests.
+
+Functions:
+preprocess -- Removes subreddits, usernames, hashtags, and sarcasm mentions from comments to be evaluated.
+"""
+
 import re
 import praw
 import numpy as np
 import evaluate
 
+"""Removes subreddits, usernames, hashtags, and sarcasm mentions from comments to be evaluated.
+
+Arguments:
+sentence -- The comment text to be processed.
+
+Returns:
+temp -- The altered comment text with the above features removed.
+"""
 def preprocess(sentence):
     remove_subreddit = re.compile(r"/?r/\w+\s?")
     remove_user_mention = re.compile(r"/?u/\w+\s?")
