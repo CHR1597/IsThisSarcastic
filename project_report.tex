@@ -4,6 +4,7 @@
 \usepackage{titling}
 \usepackage{titlesec}
 \usepackage[nottoc,notlot,notlof]{tocbibind}
+\usepackage{breakcites}
 
 \title{Is This Sarcastic? A Reddit Bot for Detecting Sarcasm}
 \author{Christopher McVeigh}
@@ -159,6 +160,12 @@ score $>$ 90                                       & "I'm certain"              
 
 The bot also includes a link to a feedback form in its reply. The intention here is that people who read the bot's reply may provide their opinion on whether the original comment was sarcastic. This would allow the original comment dataset to be augmented by more real-world data based on comments the bot has already judged. This takes the form of a Google Forms survey\footnote{https://forms.gle/VsvWNwCrU36YbxQp8} where respondents provide a link to the comment being judged, their personal judgement of sarcasm, and optionally what made them make that decision.
 
+\subsection{Project Management}
+While I did not formulate a specific model for time management during this project, I have had experience with agile development in industry, which led me to use those principles here. In general, my goals were set weekly, with more major goals being formed of smaller objectives. For example, the major goal for the first part of the project was to launch the survey for human respondents. Smaller goals for this included working out a useful dataset and the manner in which the questions would be asked.
+
+Once proper development of the bot began, I divided the main goals into the same subsections as this section of the report. This gave me a clear set of objectives to meet in order to complete the implementation of the bot. As is consistent with agile practices, I performed a lot of the testing at the same time as development. I found this to be a natural way to ensure the product would always work as well as possible, as changes can be made early without requiring extensive reworking of other areas that may have required the previous implementation.
+
+See the Discussion section for further details about the development process specifically.
 
 \section{Results}
 This section shows the results of all parts of this project. First is an analysis of the human respondents to the survey I conducted before starting development. Next is an overview of the experiments I conducted to find the optimal classifier for this problem. Finally, I examine the results I obtained from the final version of the classifier, comparing it to the earlier work I have mentioned and analysing potential error cases that prevent the classifier from scoring higher.
@@ -206,6 +213,22 @@ The experiments I performed used two different corpora based on subsets of my fi
 Perhaps unsurprisingly, all classifiers perform significantly better with a larger training set. However, what surprised me initially was that the addition of Reddit context actually made the performance worse, with the lowest-performing classifier being the Logistic Regression machine on 1000 comments with Reddit context. This classifier returned an F\textsubscript{1} score of 0.53 for the sarcastic category and 0.575 for non-sarcastic.
 
 With a larger corpus of 10,000 comments, the situation is quite different. The classifier versions that use Reddit context performed almost identically to those that do not. On average, a classifier with 10,000 comments is equally adept at detecting non-sarcastic comments with or without context, and is worse at detecting sarcasm by a margin of 0.006 F\textsubscript{1} score. This negligible difference convinced me that a larger corpus made context more useful. In addition, a 10,000-comment corpus makes the Logistic Regression model outperform the Linear SVC model. At this point, the Linear SVC model often failed to fully converge despite having 5 times the maximum iterations of the Logistic Regression model. This would suggest that the Linear SVC model was unable to find the "most similar" comments in opposing classes in 10,000 attempts. The Logistic Regression model draws its decision boundary by taking every data point into account, so it did not have this problem. This may explain why the Logistic Regression model scored higher at this stage of testing, but I felt that the problem would only be exacerbated at the full scope of the corpus of 50,000 comments.
+
+As mentioned previously, the classifier models I used for these experiments have a \texttt{\_coef} attribute, representing the coefficient of features in the decision function. After each individual classifier was generated, I had details of its coefficients printed to establish what factors are most important for classifying a comment as sarcastic. What these experiments demonstrated was that by far the most important factor was the N-grams. In other words, sarcasm appears to be best-demonstrated by vocabulary.
+
+This process also brought up a potential problem with the data I used. On one occasion, a sample classifier reported a topic in its topic modeller made up of Dutch words, as seen in figure \ref{fig:dutch}. This shows that some of the comments from SARC are non-English, potentially adding some unnecessary noise for the vast majority of cases that are in English. \cite{clicheSarcasmDetector2014} recognised this problem, solving it by only using tweets whose location data came from cities in the USA. I opted to try and solve the problem using TextBlob's \texttt{detect\_language()} function, but found to my surprise that it returned an HTTP 429 error. This function in TextBlob goes to Google's API, which has its own rate limit. Adhering to that limit would make preprocessing of data take too long to be feasible, so I then tried an offline approach using the \texttt{langdetect} library\footnote{https://pypi.org/project/langdetect/}. This returned results quickly, but was too inaccurate to be useful. Figure \ref{fig:lang} shows two English phrases marked as French and Somali respectively. I therefore decided that this problem would have such a limited effect on the final results, if any at all, that it would not be a serious issue if left unsolved.
+
+\begin{figure}[h!]
+\includegraphics[width=\linewidth]{Figures/topic_example.png}
+\caption{A topic modelled by one of the experimental classifiers, showing a vocabulary of Dutch words.}
+\label{fig:dutch}
+\end{figure}
+
+\begin{figure}[h!]
+\includegraphics[width=\linewidth]{Figures/language_inaccurate.png}
+\caption{\texttt{langdetect} showing two example English phrases as French and Somali respectively.}
+\label{fig:lang}
+\end{figure}
 
 \subsection{Final Results}
 The final classifier uses a Logistic Regression model with a limited-memory BFGS solver, a $C$ of 0.1, and 2000 maximum iterations. Table \ref{tab:cmd3} presents the performance results of /u/IsThisSarcastic alongside human results, similar sarcasm detection approaches, and state-of-the-art deep learning approaches.
@@ -265,6 +288,41 @@ This project introduced /u/IsThisSarcastic, an autonomous Reddit bot that can be
 \pagenumbering{arabic}
 \renewcommand*{\thepage}{A\arabic{page}}
 \appendix
+
+\section{Instructions for Running}
+/u/IsThisSarcastic was developed using Python 3.8.1, and requires the following optional packages (run \texttt{pip install <name>}):
+\begin{itemize}
+	\item \texttt{gensim}
+	\item \texttt{nltk}
+	\item \texttt{numpy}
+	\item \texttt{praw}
+	\item \texttt{textblob}
+	\item \texttt{vaderSentiment}
+\end{itemize}
+
+Generating new classifiers also requires the libraries \texttt{scipy} and \texttt{sklearn}.
+
+A file titled \texttt{praw.ini} is required for the PRAW library to log into Reddit as a specific user. As mentioned in section 3.5, the Reddit API requires any application that uses it to register with Reddit using OAuth2. As such, running this program requires a Reddit account to which any comments will be posted. When the application has been registered with Reddit, you will be given a client ID and client secret. Once you have this information, the \texttt{praw.ini} file should be made to this specification:
+
+\begin{verbatim}
+[project2]
+client_id = <Client ID>
+client_secret = <Client Secret>
+user_agent = <User agent string>
+username = <Account username>
+password = <Account password>
+\end{verbatim}
+
+With \texttt{praw.ini} in the \texttt{code/final} directory, run
+\texttt{detector.py}
+from the same directory. When the console reads \texttt{Ready.}, replying to a Reddit comment with the username of the connected account will prompt the bot to reply. Adding a link to another Reddit comment will prompt it to analyse the linked comment instead.
+
+To generate a new classifier, run:
+ 
+\texttt{train.py <include\_reddit> <classifier\_type>}
+
+where \texttt{<include\_reddit>} is 0 or 1 to indicate whether Reddit context should be included, and \texttt{<classifier\_type>} is 1 or 2, indicating a Linear SVC or Logistic Regression model respectively.
+
 \section{Survey questions}
 \begin{enumerate}
 	\item "Wow I wonder who could be behind this?"
@@ -347,6 +405,5 @@ This project introduced /u/IsThisSarcastic, an autonomous Reddit bot that can be
 		\item Post: "Why do some people think not having kids is "selfish"?"
 	\end{itemize}
 \end{enumerate}
-
 
 \end{document}

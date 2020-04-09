@@ -89,12 +89,11 @@ for j in range(int(ratio-1.0)):
 
 
 classifier = None
-if not classif_type in [2,3]:
+if classif_type == 1:
     classifier = LinearSVC(C=c, max_iter = 10000)
-elif classif_type == 2:
-    classifier = LogisticRegression(C=c,solver="lbfgs", multi_class="auto", max_iter = 2000)
 else:
-    classifier = RandomForestClassifier(n_estimators = 10, random_state = 0)
+    classifier = LogisticRegression(C=c,solver="lbfgs", multi_class="auto", max_iter = 2000)
+
     
 classifier.fit(new_trainvec,new_train_targets)
 
