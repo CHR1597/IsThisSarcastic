@@ -9,8 +9,9 @@ code/archive/sandbox/__pycache__/
 *.json
 !sarc-comments.json
 !nonsarc-comments.json
-*.npy
 *.p
+!lr_45652_reddit.p
+!vecdict_45652_reddit.p
 *.tp*
 **/praw.ini
 ~*.*
