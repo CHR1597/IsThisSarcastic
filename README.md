@@ -1,9 +1,9 @@
-# Sentiment Analysis vs. Human Inference for Detecting Sarcasm
+# Is This Sarcastic? A Reddit bot for detecting sarcasm
 
 ## Chris McVeigh
 
-### University of Birmingham
+### Undergraduate project for year 2019-20, University of Birmingham
 
-Undergraduate project for year 2019-20
+Uses sentiment and contextual analysis to produce a sarcasm detector for Reddit that outperforms most non-bespoke solutions.
 
 SARC corpus by Mikhail Khodak, Nikunj Saunshi, Kiran Vodrahalli available from https://nlp.cs.princeton.edu/SARC/2.0
